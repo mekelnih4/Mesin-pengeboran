@@ -1,36 +1,62 @@
-import sqlite3
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
+import os
 
-# Global variables for X and Y offsets
-def get_offsets():
-    return 10, 20  # Replace with actual logic to get offsets
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+db = SQLAlchemy(app)
 
-# Database interaction
-class Database:
-    def __init__(self, database_file):
-        self.conn = sqlite3.connect(database_file)
-        self.create_table()
+# DB Section
+class Data(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    Xoffset = db.Column(db.Float, nullable=False)
+    Yoffset = db.Column(db.Float, nullable=False)
+    DSKI = db.Column(db.Float, nullable=False)
+    AMB = db.Column(db.Float, nullable=False)
+    TOP = db.Column(db.Float, nullable=False)
 
-    def create_table(self):
-        with self.conn:
-            self.conn.execute('''CREATE TABLE IF NOT EXISTS offsets (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                x_offset REAL,
-                y_offset REAL
-            )''')
+    def __repr__(self):
+        return f'<Data {self.id}>\n'
 
-    def insert_offsets(self, x_offset, y_offset):
-        with self.conn:
-            self.conn.execute('''INSERT INTO offsets (x_offset, y_offset) VALUES (?, ?)''', (x_offset, y_offset))
+# DSKI Section
+@app.route('/dski', methods=['GET', 'POST'])
+def dskiengine():
+    if request.method == 'POST':
+        xoffset = request.form.get('xoffset')
+        yoffset = request.form.get('yoffset')
+        dski = request.form.get('dski')
+        new_data = Data(Xoffset=xoffset, Yoffset=yoffset, DSKI=dski)
+        db.session.add(new_data)
+        db.session.commit()
+        flash('Data has been added!', 'success')
+        return redirect(url_for('dskiengine'))
+    return render_template('dski.html')
 
-    def fetch_offsets(self):
-        cursor = self.conn.cursor()
-        cursor.execute('SELECT x_offset, y_offset FROM offsets')
-        return cursor.fetchall()
+# AMB Section
+@app.route('/amb', methods=['GET', 'POST'])
+def amb():
+    if request.method == 'POST':
+        amb = request.form.get('amb')
+        new_data = Data(AMB=amb)
+        db.session.add(new_data)
+        db.session.commit()
+        flash('Data has been added!', 'success')
+        return redirect(url_for('amb'))
+    return render_template('amb.html')
 
-# Main application logic
+# TOP Section
+@app.route('/top', methods=['GET', 'POST'])
+def top():
+    if request.method == 'POST':
+        top = request.form.get('top')
+        new_data = Data(TOP=top)
+        db.session.add(new_data)
+        db.session.commit()
+        flash('Data has been added!', 'success')
+        return redirect(url_for('top'))
+    return render_template('top.html')
+
 if __name__ == '__main__':
-    database = Database('offsets.db')
-    x_offset, y_offset = get_offsets()
-    database.insert_offsets(x_offset, y_offset)
-    offsets = database.fetch_offsets()
-    print(f'Inserted offsets: {offsets}')
+    db.create_all()
+    app.run(debug=True)
