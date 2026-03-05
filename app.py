@@ -1,13 +1,36 @@
-# Adding Offset Variable Definitions
-L4_Xoffset = 0
-L5_Xoffset = 0
-L6_Xoffset = 0
-L4_Yoffset = 0
-L5_Yoffset = 0
-L6_Yoffset = 0
+import sqlite3
 
-# Updated Output Section
-st.write("### Hasil Lubang:")
-st.write(f"Lubang 1: X={{L4_X}}, Y={{L4_Y}}, Diameter={{L4_Diameter}}, QTY={{L4_QTY}}, Xoffset={{L4_Xoffset}}, Yoffset={{L4_Yoffset}}")
-st.write(f"Lubang 2: X={{L5_X}}, Y={{L5_Y}}, Diameter={{L5_Diameter}}, QTY={{L5_QTY}}, Xoffset={{L5_Xoffset}}, Yoffset={{L5_Yoffset}}")
-st.write(f"Lubang 3: X={{L6_X}}, Y={{L6_Y}}, Diameter={{L6_Diameter}}, QTY={{L6_QTY}}, Xoffset={{L6_Xoffset}}, Yoffset={{L6_Yoffset}}")
+# Global variables for X and Y offsets
+def get_offsets():
+    return 10, 20  # Replace with actual logic to get offsets
+
+# Database interaction
+class Database:
+    def __init__(self, database_file):
+        self.conn = sqlite3.connect(database_file)
+        self.create_table()
+
+    def create_table(self):
+        with self.conn:
+            self.conn.execute('''CREATE TABLE IF NOT EXISTS offsets (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                x_offset REAL,
+                y_offset REAL
+            )''')
+
+    def insert_offsets(self, x_offset, y_offset):
+        with self.conn:
+            self.conn.execute('''INSERT INTO offsets (x_offset, y_offset) VALUES (?, ?)''', (x_offset, y_offset))
+
+    def fetch_offsets(self):
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT x_offset, y_offset FROM offsets')
+        return cursor.fetchall()
+
+# Main application logic
+if __name__ == '__main__':
+    database = Database('offsets.db')
+    x_offset, y_offset = get_offsets()
+    database.insert_offsets(x_offset, y_offset)
+    offsets = database.fetch_offsets()
+    print(f'Inserted offsets: {offsets}')
