@@ -231,7 +231,7 @@ def handle_db():
     # Dempetkan mirror: set Y offset to 0 supaya tidak ada jarak antara mirror dan y offset
     L4_Yoffset = 0
 
-    L5_X = L4_Y + 64
+    L5_X = L4_X + 64
     L5_Y = -(76 - jarak_lantai)
     L5_Diameter = 8
     L5_QTY = 2
