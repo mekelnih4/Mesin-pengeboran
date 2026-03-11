@@ -31,7 +31,7 @@ if bagian == "DB":
         L4_Xoffset = -512
         L4_Yoffset = 0
 
-        L5_X = L4_Y + 64
+        L5_X = L4_X + 64
         L5_Y = -(76 - jarak_lantai)
         L5_Diameter = 8
         L5_QTY = 2
