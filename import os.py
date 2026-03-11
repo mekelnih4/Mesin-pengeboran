@@ -224,7 +224,7 @@ def handle_db():
     Kelipatan2 = (int(lebar) // 32) * 32 - 64
 
     L4_X = (panjang - (Kelipatan - 32)) / 2
-    L4_Y = kedalaman / 2
+    L4_Y = (kedalaman / 2)
     L4_Diameter = 5
     L4_QTY = 2
     L4_Xoffset = -512
@@ -232,7 +232,7 @@ def handle_db():
     L4_Yoffset = 0
 
     L5_X = L4_X + 64
-    L5_Y = kedalaman / 2
+    L5_Y = (kedalaman / 2)
     L5_Diameter = 8
     L5_QTY = 2
     L5_Xoffset = -384
