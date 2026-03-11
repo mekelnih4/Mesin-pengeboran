@@ -3,10 +3,6 @@ import os
 import sys
 from datetime import datetime
 
-# Import fungsi dari file asli (import os.py)
-# Asumsikan file asli bernama import_os.py atau sesuaikan
-# Untuk demo, kita buat versi sederhana
-
 st.title("Aplikasi Penghitung Lubang Kayu - Streamlit")
 
 st.sidebar.header("Pilih Bagian Kayu")
@@ -14,6 +10,7 @@ bagian = st.sidebar.selectbox("Bagian", ["DSKA", "DSKI", "DB", "TOP", "AMB"])
 
 st.header(f"Program untuk {bagian}")
 
+# Contoh input sederhana untuk DB
 # Contoh input sederhana untuk DB
 if bagian == "DB":
     st.subheader("Dinding Belakang (DB)")
@@ -27,26 +24,32 @@ if bagian == "DB":
         Kelipatan = (int(panjang) // 32) * 32 - 64
         Kelipatan2 = (int(lebar) // 32) * 32 - 64
 
-        L4_X = -(76 - jarak_lantai)
-        L4_Y = (lebar - (Kelipatan2 - 32)) / 2
+        L4_X = (lebar - (Kelipatan2 - 32)) / 2
+        L4_Y = -(76 - jarak_lantai)
         L4_Diameter = 5
         L4_QTY = 2
+        L4_Xoffset = -512
+        L4_Yoffset = 0
 
-        L5_X = -(76 - jarak_lantai)
-        L5_Y = L4_Y + 64
+        L5_X = L4_Y + 64
+        L5_Y = -(76 - jarak_lantai)
         L5_Diameter = 8
         L5_QTY = 2
+        L5_Xoffset = -384  # ✅ DIUBAH dari 0 menjadi -512
+        L5_Yoffset = 0
 
         L6_X = panjang / 2
         L6_Y = -(kedalaman / 2)
         L6_Diameter = 8
         L6_QTY = 1
+        L6_Xoffset = 0  # ✅ DIUBAH dari 0 menjadi -384
+        L6_Yoffset = 0
 
         st.write("### Hasil Lubang:")
-        st.write(f"Lubang 1: X={L4_X}, Y={L4_Y}, Diameter={L4_Diameter}, QTY={L4_QTY}")
-        st.write(f"Lubang 2: X={L5_X}, Y={L5_Y}, Diameter={L5_Diameter}, QTY={L5_QTY}")
-        st.write(f"Lubang 3: X={L6_X}, Y={L6_Y}, Diameter={L6_Diameter}, QTY={L6_QTY}")
-
+        st.write(f"Lubang 1: X={L4_X}, Y={L4_Y}, Diameter={L4_Diameter}, QTY={L4_QTY}, Xoffset={L4_Xoffset}, Yoffset={L4_Yoffset}")
+        st.write(f"Lubang 2: X={L5_X}, Y={L5_Y}, Diameter={L5_Diameter}, QTY={L5_QTY}, Xoffset={L5_Xoffset}, Yoffset={L5_Yoffset}")
+        st.write(f"Lubang 3: X={L6_X}, Y={L6_Y}, Diameter={L6_Diameter}, QTY={L6_QTY}, Xoffset={L6_Xoffset}, Yoffset={L6_Yoffset}")
+        
 elif bagian == "DSKI":
     st.subheader("Dinding Samping Kiri (DSKI)")
     panjang = st.number_input("Panjang Kayu (mm)", min_value=0.0, value=600.0)
