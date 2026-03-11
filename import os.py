@@ -223,7 +223,7 @@ def handle_db():
     Kelipatan = (int(panjang) // 32) * 32 - 64
     Kelipatan2 = (int(lebar) // 32) * 32 - 64
 
-    L4_X = (lebar - (Kelipatan2 - 32)) / 2
+    L4_X = (panjang - (Kelipatan - 32)) / 2
     L4_Y = -(76 - jarak_lantai)
     L4_Diameter = 5
     L4_QTY = 2
