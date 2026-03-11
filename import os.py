@@ -47,7 +47,7 @@ TEST_TEMPLATES = {
         'panjang': 800.0,
         'lebar': 300.0,
         'kedalaman': 16.0,
-        'jarak_lantai': 76.0,
+        'jarak_lantai': 20.0,
     },
     'AMB': {
         'panjang': 600.0,
@@ -79,27 +79,27 @@ clear_screen()
 print("========================\nProgram mesin pengeboran\n========================")
 
 
-# Utility: centralized hole output formatting
+# Utility: centralized hole output formatting - DIPERBAIKI
 def print_hole(idx, x, y, diameter, qty, xoffset, yoffset, hole_type="", mirror: str = None):
-    """Print a hole's parameters in the standard format.
+    """Print a hole's parameters in the standard format dengan syntax highlighting yang lebih baik.
 
     mirror: optional string to print a 'Mirror' line immediately after Yoffset.
     """
     type_text = f" ({hole_type})" if hole_type else ""
-    # Build base lines
-    out = f"""
-Lubang {idx}{type_text} memiliki:
-X        : {x} mm
-Y        : {y} mm
-Diameter : {diameter} mm
-QTY      : {qty}
-Xoffset  : {xoffset} mm
-Yoffset  : {yoffset} mm
-"""
-    # Append mirror line inside the same block when provided
+    
+    # Setiap variabel dalam {} akan di-highlight dengan warna berbeda
+    print(f"\nLubang {idx}{type_text} memiliki:")
+    print(f"X        : {x} mm")
+    print(f"Y        : {y} mm")
+    print(f"Diameter : {diameter} mm")
+    print(f"QTY      : {qty}")
+    print(f"Xoffset  : {xoffset} mm")
+    print(f"Yoffset  : {yoffset} mm")
+    
+    # Append mirror line jika disediakan
     if mirror:
-        out += f"Mirror   : {mirror}\n"
-    print(out)
+        print(f"Mirror   : {mirror}")
+
 
 # Helper: input that supports 'x' to go back one step with validation
 def input_with_back(prompt, cast=None, allow_empty=False, min_val=None, max_val=None, options=None):
@@ -223,19 +223,19 @@ def handle_db():
     Kelipatan = (int(panjang) // 32) * 32 - 64
     Kelipatan2 = (int(lebar) // 32) * 32 - 64
 
-    L4_X = -(76 - jarak_lantai)
-    L4_Y = (lebar - (Kelipatan2 - 32)) / 2
+    L4_X = (lebar - (Kelipatan2 - 32)) / 2
+    L4_Y = -(76 - jarak_lantai)
     L4_Diameter = 5
     L4_QTY = 2
-    L4_Xoffset = 0
+    L4_Xoffset = -512
     # Dempetkan mirror: set Y offset to 0 supaya tidak ada jarak antara mirror dan y offset
     L4_Yoffset = 0
 
-    L5_X = -(76 - jarak_lantai)
-    L5_Y = L4_Y + 64
+    L5_X = L4_Y + 64
+    L5_Y = -(76 - jarak_lantai)
     L5_Diameter = 8
     L5_QTY = 2
-    L5_Xoffset = 0
+    L5_Xoffset = -384
     # Dempetkan mirror: set Y offset to 0 supaya mirror sejajar tanpa jarak
     L5_Yoffset = 0
 
@@ -661,5 +661,5 @@ elif pilihan_bagian == "TOP" or pilihan_bagian == bagian[3]:
     handle_top()
     AUTO_FILL_TEMPLATE = None
 else:
-    print("Pilihan bagian tidak valid. Silakan jalankan ulang dan pilih salah satu opsi yang tersedia.")
+    print("Pilihan bagian tidak valid. Silakan jalankan ulang dan pilih salah satu opsi yang tersedia.")
 
